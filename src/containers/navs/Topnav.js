@@ -81,7 +81,8 @@ const TopNav = ({
 
 
   const handleLogout = () => {
-    logoutUserAction(history);
+    document.cookie = `lgLegendary= `;
+    window.location.reload()
   };
 
   const menuButtonClick = (e, _clickCount, _conClassnames) => {
@@ -130,7 +131,7 @@ const TopNav = ({
 
       <div className="navbar-right">
         {isDarkSwitchActive && <TopnavDarkSwitch />}
-  
+
         <div className="user d-inline-block">
           <UncontrolledDropdown className="dropdown-menu-right">
             <DropdownToggle className="p-0" color="empty">

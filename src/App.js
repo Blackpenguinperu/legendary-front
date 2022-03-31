@@ -51,89 +51,91 @@ const App = ({ locale }) => {
   }, [direction]);
 
   const getCookieValue = (name) => (
-	document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)')?.pop() || ''
+    document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)')?.pop() || ''
   )
 
-  useEffect(()=>{
-	const cookie = getCookieValue("lgLegendary");
-	if (cookie) {
-		setUserLoggued(true);
-		// window.location = "/app/dashboards/default"
-	} else {
-		setUserLoggued(false);
-	}
-  },[])
-//   adminRoot = userLoggued ? adminRoot :ç "/login";
+  useEffect(() => {
+    const cookie = getCookieValue("lgLegendary");
+    if (cookie) {
+      setUserLoggued(true);
+      // window.location = "/app/dashboards/default"
+    } else {
+      setUserLoggued(false);
+    }
+  }, [])
+  //   adminRoot = userLoggued ? adminRoot :ç "/login";
   return (
     <div className="h-100">
-		<IntlProvider
-			locale={currentAppLocale.locale}
-			messages={currentAppLocale.messages}
-		>
-			<>
-			<NotificationContainer />
-			<Suspense fallback={<div className="loading" />}>
-				{userLoggued === undefined && (
-					<div>
-						Loading...
-					</div>
-				)}
-				{userLoggued === false && 
-					<Router>
-						<Switch>
-							<Route
-								path={`/login`}
-								render={(props) => <Login {...props} setUserLoggued={setUserLoggued} />}
-							/>
-							<Route
-								path={`/register`}
-								render={(props) => <Register {...props} setUserLoggued={setUserLoggued} />}
-							/>
-							<Route
-								path="/error"
-								exact
-								render={(props) => <ViewError {...props} />}
-							/>
-							<Redirect exact from="/" to={"/login"} />
-							<Redirect to="/error" />
+      <IntlProvider
+        locale={currentAppLocale.locale}
+        messages={currentAppLocale.messages}
+      >
+        <>
+          <NotificationContainer />
+          <Suspense fallback={<div className="loading" />}>
+            {userLoggued === undefined && (
+              <div>
+                Loading...
+              </div>
+            )}
+            {userLoggued === false &&
+              <Router>
+                <Switch>
+                  <Route
+                    path={`/login`}
+                    render={(props) => <Login {...props} setUserLoggued={setUserLoggued} />}
+                  />
+                  <Route
+                    path={`/register`}
+                    render={(props) => <Register {...props} setUserLoggued={setUserLoggued} />}
+                  />
+                  <Route
+                    path="/error"
+                    exact
+                    render={(props) => <ViewError {...props} />}
+                  />
+                  <Redirect exact from="/" to={"/login"} />
+                  <Redirect to="/" />
 
-						</Switch>
-					</Router>
-				}
-				{userLoggued && (
-					<Router>
-						<Switch>
-							<ProtectedRoute
-								path={adminRoot}
-								component={ViewApp}
-								roles={[UserRole.Admin, UserRole.Editor]}
-							/>
-							<Route
-								path="/error"
-								exact
-								render={(props) => <ViewError {...props} />}
-							/>
-							<Route
-								path="/unauthorized"
-								exact
-								render={(props) => <ViewUnauthorized {...props} />}
-							/>
-							<Route
-								path="/app"
-								exact
-								render={(props) => <ViewUser {...props} />}
-							/>
-							<Redirect exact from="/login" to={adminRoot} />
-							
-							<Redirect exact from="/" to={adminRoot} />
-							
-							<Redirect to="/error" />
-						</Switch>
-					</Router>
-				)}
-			</Suspense>
-			</>
-		</IntlProvider>
+                </Switch>
+              </Router>
+            }
+            {userLoggued && (
+              <Router>
+                <Switch>
+                  <ProtectedRoute
+                    path={adminRoot}
+                    component={ViewApp}
+                    roles={[UserRole.Admin, UserRole.Editor]}
+                  />
+                  <Route
+                    path="/error"
+                    exact
+                    render={(props) => <ViewError {...props} />}
+                  />
+                  <Route
+                    path="/unauthorized"
+                    exact
+                    render={(props) => <ViewUnauthorized {...props} />}
+                  />
+                  <Route
+                    path="/app"
+                    exact
+                    render={(props) => <ViewUser {...props} />}
+                  />
+                  <Redirect exact from="/login" to={adminRoot} />
+
+                  <Redirect exact from="/register" to={adminRoot} />
+
+                  <Redirect exact from="/" to={adminRoot} />
+
+                  <Redirect to="/error" />
+                </Switch>
+              </Router>
+            )}
+          </Suspense>
+        </>
+      </IntlProvider>
     </div>
   );
 };
